@@ -87,12 +87,14 @@ def feat_extract():
             return collapsed
 
         (rate, sig) = wav.read(wav_path)
-        fbank_feat = python_speech_features.logfbank(sig, rate, nfilt=40)
-        energy = extract_energy(rate, sig)
-        feat = np.hstack([energy, fbank_feat])
+        #fbank_feat = python_speech_features.logfbank(sig, rate, nfilt=40)
+        feat = python_speech_features.mfcc(sig, rate, appendEnergy=True)
+        #energy = extract_energy(rate, sig)
+        #feat = np.hstack([energy, fbank_feat])
         delta_feat = python_speech_features.delta(feat, 2)
-        delta_delta_feat = python_speech_features.delta(delta_feat, 2)
-        l = [feat, delta_feat, delta_delta_feat]
+        #delta_delta_feat = python_speech_features.delta(delta_feat, 2)
+        #l = [feat, delta_feat, delta_delta_feat]
+        l = [feat, delta_feat]
         all_feats = np.array(l)
         # Make time the first dimension for easy length normalization padding later.
         all_feats = np.swapaxes(all_feats, 0, 1)

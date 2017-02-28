@@ -19,8 +19,8 @@ import tensorflow as tf
 import numpy as np
 from utils import load_batched_data
 
-INPUT_PATH = './sample_data/mfcc' #directory of MFCC nFeatures x nFrames 2-D array .npy files
-TARGET_PATH = './sample_data/char_y/' #directory of nCharacters 1-D array .npy files
+INPUT_PATH = './timit_small/feats' #directory of MFCC nFeatures x nFrames 2-D array .npy files
+TARGET_PATH = './timit_small/char_y/' #directory of nCharacters 1-D array .npy files
 
 ####Learning Parameters
 learningRate = 0.001
@@ -31,7 +31,7 @@ batchSize = 4
 ####Network Parameters
 nFeatures = 26 #12 MFCC coefficients + energy, and derivatives
 nHidden = 128
-nClasses = 28#27 characters, plus the "blank" for CTC
+nClasses = 62#27 characters, plus the "blank" for CTC
 
 ####Load data
 print('Loading data')
