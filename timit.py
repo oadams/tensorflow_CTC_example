@@ -10,6 +10,21 @@ import subprocess
 
 import config
 
+num_phones = 61
+
+def phone_classes(phn_dir="timit/char_y"):
+    """ Returns a sorted list of phone classes observed in the TIMIT corpus."""
+
+    phone_set = set()
+    for fn in os.listdir(phn_dir):
+        path = join(phn_dir, fn)
+        with open(path) as phn_f:
+            for phone in phn_f.readline().split():
+                phone_set.add(phone)
+
+    assert len(phone_set) == num_phones
+    return sorted(list(phone_set))
+
 def create_raw_data():
     """ Copies the original TIMIT data to a working directory and does basic
     preprocessing such as removing phone timestamps and converting NIST files
@@ -34,8 +49,8 @@ def create_raw_data():
             org_path = join(root, fn)
 
             if fn.endswith("phn"):
-                tgt_path = join(config.TGT_DIR, "char_y", "%d.phn" % utter_id)
-                preprocess_phones(org_path, tgt_path)
+                phn_path = join(config.TGT_DIR, "char_y", "%d.phn" % utter_id)
+                preprocess_phones(org_path, phn_path)
 
                 # Address the corresponding WAV file.
                 tgt_path = join(config.TGT_DIR, "feats", "%d.wav" % utter_id)
@@ -45,10 +60,6 @@ def create_raw_data():
                 sph2wav(sphere_path, tgt_path)
 
                 utter_id += 1
-
-def phn2npy():
-    """ Converts the *.phn files to *.npy, which are 1d numpy arrays of integers."""
-    pass
 
 def feat_extract():
     """ Extracts features from WAV files and puts them in 2e numpy arrays of floats."""
@@ -102,6 +113,21 @@ def feat_extract():
 
     pass
 
+def phn2npy():
+    """ Converts the *.phn files to *.npy, which are 1d numpy arrays of integers."""
+
+    for fn in os.listdir("timit/char_y"):
+        phn_path = join("timit/char_y", fn)
+        with open(phn_path) as phn_f:
+            phns = phn_f.readline().split()
+            indices = [phone_map[phn] for phn in phns]
+            a = np.array(indices)
+            np.save(phn_path[:-3] + "npy", a)
+
+
 if __name__ == "__main__":
-    #create_raw_data()
+    create_raw_data()
+    phone_set = phone_classes()
+    phone_map = {phone:index for index, phone in enumerate(phone_classes())}
+    phn2npy()
     feat_extract()
