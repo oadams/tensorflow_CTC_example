@@ -19,14 +19,14 @@ import tensorflow as tf
 import numpy as np
 from utils import load_batched_data
 
-INPUT_PATH = './timit_small/feats' #directory of MFCC nFeatures x nFrames 2-D array .npy files
-TARGET_PATH = './timit_small/char_y/' #directory of nCharacters 1-D array .npy files
+INPUT_PATH = './timit/feats' #directory of MFCC nFeatures x nFrames 2-D array .npy files
+TARGET_PATH = './timit/char_y/' #directory of nCharacters 1-D array .npy files
 
 ####Learning Parameters
 learningRate = 0.001
 momentum = 0.9
 nEpochs = 300
-batchSize = 4
+batchSize = 100
 
 ####Network Parameters
 nFeatures = 26 #12 MFCC coefficients + energy, and derivatives
